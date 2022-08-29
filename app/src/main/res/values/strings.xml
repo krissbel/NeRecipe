@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">My recipe book</string>
+    <string name="add_recipe">add_recipe</string>
+    <string name="description_recipe_save">description_recipe_save</string>
+    <string name="remove">remove</string>
+    <string name="edit">edit</string>
+    <string name="author_name">author_name</string>
+    <string name="category_name">category_name</string>
+    <string name="recipe_text">recipe_text</string>
+    <string name="author_hint">recipe_author</string>
+    <string name="category_hint">category</string>
+    <string name="recipe_hint">recipe_text</string>
+    <string name="new_step">NEW STEP</string>
+    <string name="filter">FILTER</string>
+    <string name="Mediterranean">Mediterranean</string>
+    <string name="Russian">Russian</string>
+    <string name="American">American</string>
+    <string name="Eastern">Eastern</string>
+    <string name="PanAsian">PanAsian</string>
+    <string name="Asian">Asian</string>
+    <string name="European">European</string>
+    <string name="ok">ok</string>
+    <string name="show_all_recipes">Show all recipes</string>
+    <string name="author_name_title">Author name</string>
+    <string name="category">Category</string>
+    <string name="recipe_name">Recipe name</string>
+
+    <string-array name="Category">
+        <item>European</item>
+        <item>Asian</item>
+        <item>PanAsian</item>
+        <item>Eastern</item>
+        <item>American</item>
+        <item>Russian</item>
+        <item>Mediterranean</item>
+    </string-array>
+</resources>
