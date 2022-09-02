@@ -22,12 +22,12 @@
     </fragment>
     <fragment
         android:id="@+id/recipeFragment"
-        android:name="ru.netology.myrecipebook.activity.NewRecipeOrEditFragment"
+        android:name="ru.netology.myrecipebook.activity.NewRecipeFragment"
         android:label="fragment_recipe"
         tools:layout="@layout/fragment_new_recipe">
     <argument
         android:name="initial_content"
-        app:argType="string"
+        app:argType="ru.netology.myrecipebook.components.Recipe"
         app:nullable="true" />
         <action
             android:id="@+id/action_to_stepFragment"
@@ -52,5 +52,9 @@
         android:id="@+id/recipeDetailsFragment"
         android:name="ru.netology.myrecipebook.activity.RecipeDetailsFragment"
         android:label="RecipeDetailsFragment"
-        tools:layout="@layout/recipe_list_item"/>
+        tools:layout="@layout/recipe_list_item">
+        <action
+            android:id="@+id/action_recipeDetailsFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
 </navigation>

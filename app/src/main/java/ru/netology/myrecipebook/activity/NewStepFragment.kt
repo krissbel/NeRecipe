@@ -27,7 +27,7 @@ class NewStepFragment:Fragment() {
 
 
       binding.edit.requestFocus()
-      binding.edit.setText(args.initialStep)
+    //  binding.edit.setText(args.initialStep)
 
       binding.ok.setOnClickListener {
          onOkButtonClicked(binding)

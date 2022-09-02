@@ -17,8 +17,8 @@ interface RecipeRepository {
     fun update()
     fun getCategories(categories: List<ListCategory>)
     fun showFavorite()
-
-
+//    fun saveStep(step: Step)
+//    fun getRecipeById(recipeId: Long): Recipe
 
     companion object {
         const val NEW_RECIPE_ID = 0L

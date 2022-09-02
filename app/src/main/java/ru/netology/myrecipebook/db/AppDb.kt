@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.netology.myrecipebook.db.entity.RecipeEntity
+import ru.netology.myrecipebook.db.entity.StepEntity
 
 @Database(
     entities = [RecipeEntity::class],

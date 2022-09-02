@@ -1,7 +1,5 @@
 package ru.netology.myrecipebook.activity
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -64,12 +62,28 @@ class RecipeDetailsFragment:Fragment() {
             }
 
             setFragmentResultListener(
-                requestKey = NewRecipeOrEditFragment.REQUEST_KEY
+                requestKey = NewRecipeFragment.REQUEST_KEY
             ) { requestKey, bundle ->
-                if (requestKey != NewRecipeOrEditFragment.REQUEST_KEY) return@setFragmentResultListener
-                val newPostContent = bundle.getString(NewRecipeOrEditFragment.RESULT_KEY_TEXT)
+                if (requestKey != NewRecipeFragment.REQUEST_KEY) return@setFragmentResultListener
+                val newContentRecipe = bundle.getString(NewRecipeFragment.RESULT_KEY_AUTHOR)
                     ?: return@setFragmentResultListener
-                viewModel.onSaveClicked(newPostContent, NewRecipeOrEditFragment.RESULT_KEY_AUTHOR, NewRecipeOrEditFragment.RESULT_KEY_CATEGORY)
+                val category = bundle.getString(NewRecipeFragment.RESULT_KEY_CATEGORY)
+                    ?:return@setFragmentResultListener
+                val recipeName = bundle.getString(NewRecipeFragment.RESULT_KEY_TEXT)
+                    ?:return@setFragmentResultListener
+
+                if (recipeName != null) {
+                    if (category != null) {
+                        if (newContentRecipe != null) {
+                            viewModel.onSaveClicked(newContentRecipe, recipeName, category)
+                        }
+                    }
+                }
+            }
+            viewModel.navigateToRecipeScreenEvent.observe(viewLifecycleOwner){
+                val direction =
+                    RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToRecipeFragment(recipe)
+                findNavController().navigate(direction)
             }
 
 
@@ -78,14 +92,6 @@ class RecipeDetailsFragment:Fragment() {
             }
 
 
-
-//            viewModel.navigateToPostContentScreenEvent.observe(viewLifecycleOwner) { initialContent ->
-//                val direction =
-//                    PostContentDetailsFragmentDirections.toPostContentFragment(
-//                        initialContent
-//                    )
-//                findNavController().navigate(direction)
-//            }
         }.root
 
 

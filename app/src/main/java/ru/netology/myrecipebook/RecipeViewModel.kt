@@ -10,26 +10,27 @@ import ru.netology.myrecipebook.components.Recipe
 import ru.netology.myrecipebook.components.Step
 import ru.netology.myrecipebook.data.RecipeRepository
 import ru.netology.myrecipebook.data.RecipeRepository.Companion.NEW_RECIPE_ID
+import ru.netology.myrecipebook.data.RecipeRepository.Companion.NEW_STEP_ID
 import ru.netology.myrecipebook.data.RecipeRepositoryImpl
 import ru.netology.myrecipebook.db.AppDb
 import ru.netology.myrecipebook.utils.SingleLiveEvent
 
-class RecipeViewModel(application: Application):AndroidViewModel(application),
+class RecipeViewModel(application: Application) : AndroidViewModel(application),
     RecipeInteractionListener, FilterInteractionListener {
-        private val repository: RecipeRepository = RecipeRepositoryImpl(
-            dao = AppDb.getInstance(
-                context = application
-            ).recipeDao
-        )
+    private val repository: RecipeRepository = RecipeRepositoryImpl(
+        dao = AppDb.getInstance(
+            context = application
+        ).recipeDao
+    )
     val data get() = repository.data
 
-    val navigateToRecipeScreenEvent = SingleLiveEvent<String?>()
-   // val navigateToRecipeScreenEventAuthor = SingleLiveEvent<String?>()
+    val navigateToRecipeScreenEvent = SingleLiveEvent<Recipe>()
 
     val navigateToRecipeDetails = SingleLiveEvent<Long>()
     val navigateFilterEvent = SingleLiveEvent<Unit>()
     val navigateToStepScreenEvent = SingleLiveEvent<String>()
 
+    val editedRecipe = SingleLiveEvent<Recipe>()
     val currentRecipe = MutableLiveData<Recipe?>()
     val currentStep = MutableLiveData<Step?>()
     val filter = MutableLiveData<MutableSet<String>?>(mutableSetOf())
@@ -39,9 +40,17 @@ class RecipeViewModel(application: Application):AndroidViewModel(application),
     private var categoriesFilter: List<ListCategory> = ListCategory.values().toList()
 
 
+    fun getEditedRecipe(): Recipe? {
+        return editedRecipe.value
+    }
+
+//    fun getRecipeById(recipeId: Long): Recipe {
+//        return repository.getRecipeById(recipeId)
+//    }
 
 
-    fun showAllRecipes(){
+
+    fun showAllRecipes() {
         repository.getAll()
     }
 
@@ -51,29 +60,31 @@ class RecipeViewModel(application: Application):AndroidViewModel(application),
     }
 
 
-    fun onAddRecipeClicked(){
+    fun onAddRecipeClicked() {
         navigateToRecipeScreenEvent.call()
     }
 
-    fun onAddStepClicked(){
+    fun onAddStepClicked() {
         navigateToStepScreenEvent.call()
     }
 
-    fun onIsFavoriteClicked(isFavorite:Boolean){
-        if(!isFavorite) return
+    fun onIsFavoriteClicked(isFavorite: Boolean) {
+        if (!isFavorite) return
 
     }
 
-    fun showFavorite(){
+    fun showFavorite() {
         repository.showFavorite()
     }
 
-    fun onSaveClicked(authorName:String, recipeName: String, category:String) {
+    fun onSaveClicked(authorName: String, recipeName: String, category: String) {
 
-        if (recipeName.isBlank()) return
+        if (recipeName.isBlank() || authorName.isBlank()) return
 
         val recipe = currentRecipe.value?.copy(
-            nameRecipe = recipeName
+            nameRecipe = recipeName,
+            author = authorName,
+            category = category
         ) ?: Recipe(
             id = NEW_RECIPE_ID,
             author = authorName,
@@ -85,7 +96,20 @@ class RecipeViewModel(application: Application):AndroidViewModel(application),
 
     }
 
-    fun onSearchClicked(searchText:String){
+    fun onSaveStepClicked(stepText:String){
+        if(stepText.isBlank()) return
+
+        val step = currentStep.value?.copy(
+            stepText = stepText
+        )?: Step(
+            id = NEW_STEP_ID,
+            recipeId = currentRecipe.value!!.id,
+            stepText = stepText
+        )
+     //   repository.save(step)
+    }
+
+    fun onSearchClicked(searchText: String) {
         repository.search(searchText)
     }
 
@@ -93,8 +117,7 @@ class RecipeViewModel(application: Application):AndroidViewModel(application),
 
     override fun onEditClicked(recipe: Recipe) {
         currentRecipe.value = recipe
-        navigateToRecipeScreenEvent.value = recipe.nameRecipe
-
+        navigateToRecipeScreenEvent.value = recipe
     }
 
     override fun openRecipe(recipe: Recipe) {

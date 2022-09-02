@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "steps",
 foreignKeys = [ForeignKey(
     entity = RecipeEntity::class,
-    parentColumns = ["recipe_id"], childColumns = ["recipe_id"],
+    parentColumns = ["recipe_id"], childColumns = ["id_recipe"],
     onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.NO_ACTION
 )])
 
@@ -18,7 +18,7 @@ class StepEntity(
     @ColumnInfo(name = "step_id")
     val id:Long,
 
-    @ColumnInfo(name = "recipe_id")
+    @ColumnInfo(name = "id_recipe")
     val recipeId: Long,
 
     @ColumnInfo(name = "step_text")

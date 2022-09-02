@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.myrecipebook.R
 import ru.netology.myrecipebook.RecipeViewModel
 import ru.netology.myrecipebook.adapter.RecipeAdapter
 import ru.netology.myrecipebook.components.ListCategory
@@ -23,21 +22,24 @@ class FeedFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListener(
-            requestKey = NewRecipeOrEditFragment.REQUEST_KEY
+            requestKey = NewRecipeFragment.REQUEST_KEY
         ) { requestKey, bundle ->
-            if (requestKey != NewRecipeOrEditFragment.REQUEST_KEY) return@setFragmentResultListener
-            val newContentRecipe = bundle.getString(NewRecipeOrEditFragment.RESULT_KEY_AUTHOR)
+            if (requestKey != NewRecipeFragment.REQUEST_KEY) return@setFragmentResultListener
+            val newContentRecipe = bundle.getString(NewRecipeFragment.RESULT_KEY_AUTHOR)
                 ?: return@setFragmentResultListener
-            val category = bundle.getString(NewRecipeOrEditFragment.RESULT_KEY_CATEGORY)
-            val recipeName = bundle.getString(NewRecipeOrEditFragment.RESULT_KEY_TEXT)
+            val category = bundle.getString(NewRecipeFragment.RESULT_KEY_CATEGORY)
+                ?:return@setFragmentResultListener
+            val recipeName = bundle.getString(NewRecipeFragment.RESULT_KEY_TEXT)
+                ?:return@setFragmentResultListener
 
-            if (recipeName != null) {
-                if (category != null) {
-                    viewModel.onSaveClicked(newContentRecipe, recipeName, category)
-                }
+                        if (recipeName != null) {
+                            if (category != null) {
+                                if (newContentRecipe != null) {
+                                    viewModel.onSaveClicked(newContentRecipe, recipeName, category)
+                                }
+                            }
+                        }
             }
-
-        }
 
         setFragmentResultListener(
             requestKey = FilterFragment.FILTER_KEY
@@ -54,6 +56,7 @@ class FeedFragment : Fragment() {
             findNavController().navigate(direction)
 
         }
+
 
 
         viewModel.navigateFilterEvent.observe(this) {
