@@ -13,7 +13,7 @@ import ru.netology.myrecipebook.RecipeViewModel
 import ru.netology.myrecipebook.components.Recipe
 import ru.netology.myrecipebook.databinding.FragmentRecipeDetailsBinding
 
-class RecipeDetailsFragment:Fragment() {
+class RecipeDetailsFragment : Fragment() {
 
     private val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
@@ -68,21 +68,17 @@ class RecipeDetailsFragment:Fragment() {
                 val newContentRecipe = bundle.getString(NewRecipeFragment.RESULT_KEY_AUTHOR)
                     ?: return@setFragmentResultListener
                 val category = bundle.getString(NewRecipeFragment.RESULT_KEY_CATEGORY)
-                    ?:return@setFragmentResultListener
+                    ?: return@setFragmentResultListener
                 val recipeName = bundle.getString(NewRecipeFragment.RESULT_KEY_TEXT)
-                    ?:return@setFragmentResultListener
+                    ?: return@setFragmentResultListener
 
-                if (recipeName != null) {
-                    if (category != null) {
-                        if (newContentRecipe != null) {
-                            viewModel.onSaveClicked(newContentRecipe, recipeName, category)
-                        }
-                    }
-                }
+                viewModel.onSaveClicked(newContentRecipe, recipeName, category)
             }
-            viewModel.navigateToRecipeScreenEvent.observe(viewLifecycleOwner){
+            viewModel.navigateToRecipeScreenEvent.observe(viewLifecycleOwner) {
                 val direction =
-                    RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToRecipeFragment(recipe)
+                    RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToRecipeFragment(
+                        recipe
+                    )
                 findNavController().navigate(direction)
             }
 
@@ -97,9 +93,9 @@ class RecipeDetailsFragment:Fragment() {
 
     private fun FragmentRecipeDetailsBinding.render(recipe: Recipe) {
         recipe.let {
-            authorName.text = recipe?.author
-            category.text = recipe?.category
-            textRecipe.text = recipe?.nameRecipe
+            authorName.text = recipe.author
+            category.text = recipe.category
+            textRecipe.text = recipe.nameRecipe
         }
 
     }

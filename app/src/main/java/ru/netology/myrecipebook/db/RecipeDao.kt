@@ -2,7 +2,6 @@ package ru.netology.myrecipebook.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import org.w3c.dom.Text
 import ru.netology.myrecipebook.components.ListCategory
 import ru.netology.myrecipebook.db.entity.RecipeEntity
 import ru.netology.myrecipebook.db.entity.StepEntity
@@ -20,19 +19,14 @@ interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recipe: RecipeEntity)
-   // fun insertStep(step: StepEntity)
 
     @Query("UPDATE recipes SET recipeName = :recipeName, author =:author WHERE recipe_id = :recipeId")
     fun updateById(recipeId: Long, recipeName: String, author:String)
 
-//    @Query("UPDATE steps SET step_text = :stepText WHERE step_id = :stepId" )
-//    fun updateStepById(stepId: Long, stepText: String)
 
     fun save(recipe: RecipeEntity) =
         if (recipe.id == 0L) insert(recipe) else updateById(recipe.id, recipe.recipeName, recipe.author)
 
-//    fun saveStep(step: StepEntity) =
-//        if(step.id == 0L) insertStep(step) else updateStepById(step.id, step.stepText)
 
     @Query("DELETE FROM recipes WHERE recipe_id = :recipeId")
     fun removeById(recipeId: Long)
@@ -61,5 +55,33 @@ interface RecipeDao {
     fun update()
 
 
+
+}
+
+@Dao
+
+interface StepDao {
+
+    @Query("SELECT * FROM steps ORDER BY step_id DESC")
+    fun getAll(): LiveData<List<StepEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertStep(step:StepEntity)
+
+    @Query("UPDATE steps SET step_text = :stepText, step_id =:stepId WHERE id_recipe = :idRecipe")
+    fun updateStepById(stepText: String, stepId: Long, idRecipe: Long?)
+
+    fun saveStep(step: StepEntity) =
+        if (step.id == 0L) insertStep(step) else updateStepById(step.stepText, step.id, step.recipeId)
+
+    @Query("DELETE FROM steps WHERE step_id = :stepId")
+    fun removeByStepId(stepId: Long)
+
+
+    @Query("DELETE FROM steps WHERE id_recipe = :recipeId")
+    fun removeByRecipeId(recipeId: Long)
+
+    @Query("SELECT * FROM steps WHERE id_recipe = :recipeId")
+     fun getStepByRecipeId(recipeId: Long?): StepEntity
 
 }

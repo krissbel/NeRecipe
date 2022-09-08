@@ -39,8 +39,8 @@
         android:label="StepFragment"
         tools:layout="@layout/fragment_new_step">
         <argument
-            android:name="initialStep"
-            app:argType="string"
+            android:name="initial_step"
+            app:argType="ru.netology.myrecipebook.components.Step"
             app:nullable="true" />
     </fragment>
     <fragment

@@ -5,60 +5,82 @@ import ru.netology.myrecipebook.components.ListCategory
 import ru.netology.myrecipebook.components.Recipe
 import ru.netology.myrecipebook.components.Step
 import ru.netology.myrecipebook.db.RecipeDao
+import ru.netology.myrecipebook.db.StepDao
 import ru.netology.myrecipebook.db.toEntity
 import ru.netology.myrecipebook.db.toModel
 import toEntity
+import toModel
 
-class RecipeRepositoryImpl(private val dao: RecipeDao) : RecipeRepository {
+class RecipeRepositoryImpl(private val recipeDao: RecipeDao, private val stepDao: StepDao) : RecipeRepository {
 
-    override var data = dao.getAll().map { entities ->
+    override val stepData = stepDao.getAll().map{ entities ->
+        entities.map { it.toModel() }
+    }
+
+    override var data = recipeDao.getAll().map { entities ->
         entities.map { it.toModel() }
     }
 
     override fun getAll() {
-        data = dao.getAll().map { entities ->
+        data = recipeDao.getAll().map { entities ->
             entities.map { it.toModel() }
         }
     }
 
       override fun getCategories(categories: List<ListCategory>){
-          data = dao.getCategory(categories).map{entities->
+          data = recipeDao.getCategory(categories).map{ entities->
               entities.map { it.toModel() }
 
           }
       }
 
     override fun showFavorite() {
-        data = dao.showFavorite().map { entities ->
+        data = recipeDao.showFavorite().map { entities ->
             entities.map { it.toModel() }
         }
     }
 
-//    override fun getRecipeById(recipeId: Long): Recipe {
-//        data = dao.getRecipeById()
-//    }
-
-
-    override fun delete(recipeId: Long) = dao.removeById(recipeId)
-
-    override fun save(recipe: Recipe) {
-        dao.save(recipe.toEntity())
+    override fun getRecipeById(recipeId: Long) {
+        recipeDao.getRecipeById(recipeId)
     }
 
-//    override fun saveStep(step: Step) {
-//        dao.saveStep(step.toEntity())
-//    }
 
-    override fun favorite(recipeId: Long) = dao.favoriteById(recipeId)
+    override fun saveStep(step: Step) {
+       stepDao.saveStep(step.toEntity())
+    }
+
+    override fun getStepById(stepId: Long): Step {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteStep(stepId: Long) = stepDao.removeByStepId(stepId)
+
+
+    override fun updateStep(stepId: Long, stepText: String, recipeId: Long) =
+        stepDao.updateStepById(stepText, stepId, recipeId)
+
+    override fun showStepByRecipeId(recipeId: Long?) {
+        stepDao.getStepByRecipeId(recipeId)
+    }
+
+
+    override fun delete(recipeId: Long) = recipeDao.removeById(recipeId)
+
+    override fun save(recipe: Recipe) {
+        recipeDao.save(recipe.toEntity())
+    }
+
+
+    override fun favorite(recipeId: Long) = recipeDao.favoriteById(recipeId)
 
     override fun search(searchText: String) {
-        data = dao.search(searchText).map { entities ->
+        data = recipeDao.search(searchText).map { entities ->
             entities.map { it.toModel() }
         }
     }
 
     override fun update() {
-        dao.update()
+        recipeDao.update()
     }
 
 
