@@ -25,7 +25,5 @@ class RecipeEntity(
     @ColumnInfo(name = "isFavorite")
     val isFavorite: Boolean,
 
-//    @ColumnInfo(name = "indexPosition")
-//    val indexPosition: Long
 )
 

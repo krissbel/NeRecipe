@@ -8,12 +8,13 @@ import ru.netology.myrecipebook.db.entity.RecipeEntity
 import ru.netology.myrecipebook.db.entity.StepEntity
 
 @Database(
-    entities = [RecipeEntity::class],
+    entities = [RecipeEntity::class, StepEntity::class],
     version = 1
 )
 
 abstract class AppDb : RoomDatabase() {
     abstract val recipeDao: RecipeDao
+    abstract val stepDao: StepDao
 
     companion object {
         @Volatile

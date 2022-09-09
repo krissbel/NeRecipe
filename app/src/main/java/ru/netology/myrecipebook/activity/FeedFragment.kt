@@ -28,18 +28,12 @@ class FeedFragment : Fragment() {
             val newContentRecipe = bundle.getString(NewRecipeFragment.RESULT_KEY_AUTHOR)
                 ?: return@setFragmentResultListener
             val category = bundle.getString(NewRecipeFragment.RESULT_KEY_CATEGORY)
-                ?:return@setFragmentResultListener
+                ?: return@setFragmentResultListener
             val recipeName = bundle.getString(NewRecipeFragment.RESULT_KEY_TEXT)
-                ?:return@setFragmentResultListener
+                ?: return@setFragmentResultListener
 
-                        if (recipeName != null) {
-                            if (category != null) {
-                                if (newContentRecipe != null) {
-                                    viewModel.onSaveClicked(newContentRecipe, recipeName, category)
-                                }
-                            }
-                        }
-            }
+            viewModel.onSaveClicked(newContentRecipe, recipeName, category)
+        }
 
         setFragmentResultListener(
             requestKey = FilterFragment.FILTER_KEY
@@ -65,7 +59,7 @@ class FeedFragment : Fragment() {
             findNavController().navigate(direction)
 
         }
-        viewModel.navigateToRecipeDetails.observe(this){ recipeId ->
+        viewModel.navigateToRecipeDetails.observe(this) {
             val direction = FeedFragmentDirections.actionFeedFragmentToRecipeDetailsFragment()
             findNavController().navigate(direction)
 

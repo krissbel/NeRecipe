@@ -3,6 +3,7 @@ package ru.netology.myrecipebook
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import ru.netology.myrecipebook.activity.NewRecipeFragment
 import ru.netology.myrecipebook.adapter.FilterInteractionListener
 import ru.netology.myrecipebook.adapter.RecipeInteractionListener
 import ru.netology.myrecipebook.components.ListCategory
@@ -18,18 +19,24 @@ import ru.netology.myrecipebook.utils.SingleLiveEvent
 class RecipeViewModel(application: Application) : AndroidViewModel(application),
     RecipeInteractionListener, FilterInteractionListener {
     private val repository: RecipeRepository = RecipeRepositoryImpl(
-        dao = AppDb.getInstance(
+        recipeDao = AppDb.getInstance(
             context = application
-        ).recipeDao
+        ).recipeDao,
+        stepDao = AppDb.getInstance(
+            context = application
+        ).stepDao
     )
     val data get() = repository.data
+    val stepData get() = repository.stepData
+
 
     val navigateToRecipeScreenEvent = SingleLiveEvent<Recipe>()
 
     val navigateToRecipeDetails = SingleLiveEvent<Long>()
     val navigateFilterEvent = SingleLiveEvent<Unit>()
-    val navigateToStepScreenEvent = SingleLiveEvent<String>()
+    val navigateToStepScreenEvent = SingleLiveEvent<Step>()
 
+    /**/
     val editedRecipe = SingleLiveEvent<Recipe>()
     val currentRecipe = MutableLiveData<Recipe?>()
     val currentStep = MutableLiveData<Step?>()
@@ -44,15 +51,17 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         return editedRecipe.value
     }
 
-//    fun getRecipeById(recipeId: Long): Recipe {
-//        return repository.getRecipeById(recipeId)
-//    }
-
+    fun getRecipeById(recipeId: Long) = repository.getRecipeById(recipeId)
 
 
     fun showAllRecipes() {
         repository.getAll()
     }
+
+    fun showStepByRecipeId(recipeId: Long?) {
+        repository.showStepByRecipeId(recipeId)
+    }
+
 
     fun showRecipesByCategories(categories: List<ListCategory>) {
         categoriesFilter = categories
@@ -91,22 +100,26 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
             nameRecipe = recipeName,
             category = category
         )
+
         repository.save(recipe)
         currentRecipe.value = null
 
     }
 
-    fun onSaveStepClicked(stepText:String){
-        if(stepText.isBlank()) return
+    fun onSaveStepClicked(stepText: String) {
+        if (stepText.isBlank()) return
+        val recipeId = currentRecipe.value?.id
 
         val step = currentStep.value?.copy(
             stepText = stepText
-        )?: Step(
+        ) ?: Step(
             id = NEW_STEP_ID,
-            recipeId = currentRecipe.value!!.id,
+            recipeId = recipeId,
             stepText = stepText
         )
-     //   repository.save(step)
+        repository.saveStep(step)
+        currentStep.value = null
+        currentRecipe.value = null
     }
 
     fun onSearchClicked(searchText: String) {
@@ -126,6 +139,14 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     }
 
     override fun onFavoriteClicked(recipe: Recipe) = repository.favorite(recipe.id)
+
+    override fun onRemoveStepClicked(step: Step) = repository.deleteStep(step.id)
+
+
+    override fun onEditStepClicked(step: Step) {
+        currentStep.value = step
+        navigateToStepScreenEvent.value = step
+    }
 
     override fun checkboxIsActive(category: String) {
         val listFilter = filter.value

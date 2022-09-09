@@ -3,13 +3,12 @@ package ru.netology.myrecipebook.activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Spinner
-import androidx.core.view.get
 import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.myrecipebook.R
 import ru.netology.myrecipebook.RecipeViewModel
+import ru.netology.myrecipebook.adapter.StepAdapter
 import ru.netology.myrecipebook.components.Recipe
 import ru.netology.myrecipebook.databinding.FragmentNewRecipeBinding
 
@@ -18,15 +17,25 @@ class NewRecipeFragment : Fragment() {
     private val args by navArgs<NewRecipeFragmentArgs>()
     private val viewModel: RecipeViewModel by activityViewModels<RecipeViewModel>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         viewModel.navigateToStepScreenEvent.observe(this) { initialStep ->
             val direction =
                 NewRecipeFragmentDirections.actionToStepFragment(initialStep)
             findNavController().navigate(direction)
-            viewModel.onSaveStepClicked(initialStep)
 
+        }
+
+        setFragmentResultListener(
+            requestKey = NewStepFragment.REQUEST_KEY_STEP
+        ) { requestKey, bundle ->
+            if (requestKey != NewStepFragment.REQUEST_KEY_STEP) return@setFragmentResultListener
+            val newContentStep = bundle.getString(NewStepFragment.RESULT_KEY_STEP)
+                ?: return@setFragmentResultListener
+            viewModel.onSaveStepClicked(newContentStep)
         }
     }
 
@@ -35,6 +44,7 @@ class NewRecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentNewRecipeBinding.inflate(layoutInflater, container, false).also { binding ->
+
 
         binding.authorName.requestFocus()
         binding.authorName.setText(args.initialContent?.author)
@@ -51,6 +61,35 @@ class NewRecipeFragment : Fragment() {
         binding.newStep.setOnClickListener {
             viewModel.onAddStepClicked()
         }
+
+//        val adapter = StepAdapter(viewModel)
+//        binding.showSteps.setOnClickListener {
+//            viewModel.showStepByRecipeId(recipeId = args.initialContent?.id)
+//            viewModel.stepData.observe(viewLifecycleOwner) { steps ->
+             //   viewModel.showStepByRecipeId(args.initialContent?.id)
+//                adapter.submitList(steps)
+//            }
+//        }
+
+        val adapter = StepAdapter(viewModel)
+        binding.listSteps.adapter = adapter
+
+
+
+        fun showSteps() {
+            viewModel.stepData.observe(viewLifecycleOwner) { steps ->
+               viewModel.showStepByRecipeId(args.initialContent?.id)
+                adapter.submitList(steps)
+            }
+        }
+
+        viewModel.stepData.observe(viewLifecycleOwner){steps ->
+            viewModel.showStepByRecipeId(viewModel.currentRecipe.value?.id)
+            showSteps()
+        }
+
+
+
     }.root
 
 
@@ -80,4 +119,5 @@ class NewRecipeFragment : Fragment() {
         const val RESULT_KEY_AUTHOR = "author"
         const val REQUEST_KEY = "requestKey"
     }
+
 }
