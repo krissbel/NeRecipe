@@ -92,6 +92,13 @@
         android:textColor="@color/black"
         tools:text="НАЗВАНИЕ РЕЦЕПТА" />
 
+    <ImageView
+        android:id="@+id/imageRecipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textRecipe">
+    </ImageView>
+
     <androidx.constraintlayout.widget.Barrier
         android:layout_width="0dp"
         android:layout_height="8dp"

@@ -1,6 +1,8 @@
 package ru.netology.myrecipebook
 
 import android.app.Application
+import android.content.Intent
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.myrecipebook.activity.NewRecipeFragment
@@ -124,6 +126,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 
     fun onSearchClicked(searchText: String) {
         repository.search(searchText)
+    }
+
+    fun selectImage(){
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
     }
 
     override fun onRemoveClicked(recipe: Recipe) = repository.delete(recipe.id)
