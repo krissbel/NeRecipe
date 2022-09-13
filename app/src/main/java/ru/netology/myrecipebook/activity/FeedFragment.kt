@@ -64,6 +64,10 @@ class FeedFragment : Fragment() {
             findNavController().navigate(direction)
 
         }
+        viewModel.navigateToStepScreenEvent.observe(this) { step ->
+            val direction = FeedFragmentDirections.actionFeedFragmentToStepFragment(step)
+            findNavController().navigate(direction)
+        }
     }
 
     override fun onCreateView(

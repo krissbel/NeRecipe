@@ -1,5 +1,6 @@
 package ru.netology.myrecipebook.data
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import ru.netology.myrecipebook.components.ListCategory
 import ru.netology.myrecipebook.components.Recipe
@@ -13,7 +14,7 @@ import toModel
 
 class RecipeRepositoryImpl(private val recipeDao: RecipeDao, private val stepDao: StepDao) : RecipeRepository {
 
-    override val stepData = stepDao.getAll().map{ entities ->
+    override var stepData = stepDao.getAll().map{ entities ->
         entities.map { it.toModel() }
     }
 
@@ -60,7 +61,9 @@ class RecipeRepositoryImpl(private val recipeDao: RecipeDao, private val stepDao
         stepDao.updateStepById(stepText, stepId, recipeId)
 
     override fun showStepByRecipeId(recipeId: Long?) {
-        stepDao.getStepByRecipeId(recipeId)
+        stepData = stepDao.getStepByRecipeId(recipeId).map { entities ->
+            entities.map{it.toModel()}
+        }
     }
 
 

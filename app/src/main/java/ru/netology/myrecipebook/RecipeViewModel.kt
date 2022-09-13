@@ -1,11 +1,8 @@
 package ru.netology.myrecipebook
 
 import android.app.Application
-import android.content.Intent
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import ru.netology.myrecipebook.activity.NewRecipeFragment
 import ru.netology.myrecipebook.adapter.FilterInteractionListener
 import ru.netology.myrecipebook.adapter.RecipeInteractionListener
 import ru.netology.myrecipebook.components.ListCategory
@@ -49,20 +46,21 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
     private var categoriesFilter: List<ListCategory> = ListCategory.values().toList()
 
 
-    fun getEditedRecipe(): Recipe? {
-        return editedRecipe.value
-    }
-
-    fun getRecipeById(recipeId: Long) = repository.getRecipeById(recipeId)
+//    fun getEditedRecipe(): Recipe? {
+//        return currentRecipe.value
+//    }
+//
+//    fun getRecipeById(recipeId: Long) = repository.getRecipeById(recipeId)
 
 
     fun showAllRecipes() {
         repository.getAll()
     }
 
-    fun showStepByRecipeId(recipeId: Long?) {
+    fun showStepByRecipeId(recipeId: Long?){
         repository.showStepByRecipeId(recipeId)
     }
+
 
 
     fun showRecipesByCategories(categories: List<ListCategory>) {
@@ -73,16 +71,18 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 
     fun onAddRecipeClicked() {
         navigateToRecipeScreenEvent.call()
+
     }
 
-    fun onAddStepClicked() {
+    override fun onAddStepClicked(recipe: Recipe?){
+        currentRecipe.value = recipe
         navigateToStepScreenEvent.call()
     }
 
-    fun onIsFavoriteClicked(isFavorite: Boolean) {
-        if (!isFavorite) return
-
-    }
+//    fun onIsFavoriteClicked(isFavorite: Boolean) {
+//        if (!isFavorite) return
+//
+//    }
 
     fun showFavorite() {
         repository.showFavorite()
@@ -103,6 +103,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
             category = category
         )
 
+
         repository.save(recipe)
         currentRecipe.value = null
 
@@ -110,7 +111,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
 
     fun onSaveStepClicked(stepText: String) {
         if (stepText.isBlank()) return
-        val recipeId = currentRecipe.value?.id
+        val recipeId = currentRecipe.value?.id?:0
 
         val step = currentStep.value?.copy(
             stepText = stepText
@@ -128,12 +129,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         repository.search(searchText)
     }
 
-    fun selectImage(){
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
-    }
 
     override fun onRemoveClicked(recipe: Recipe) = repository.delete(recipe.id)
 
@@ -141,6 +136,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application),
         currentRecipe.value = recipe
         navigateToRecipeScreenEvent.value = recipe
     }
+
+//    override fun onAddStepClicked(recipe: Recipe) {
+//        currentRecipe.value = recipe
+//        navigateToStepScreenEvent.call()
+//    }
 
     override fun openRecipe(recipe: Recipe) {
         currentRecipe.value = recipe

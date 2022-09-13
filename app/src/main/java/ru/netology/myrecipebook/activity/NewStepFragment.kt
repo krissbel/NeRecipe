@@ -13,45 +13,44 @@ import ru.netology.myrecipebook.RecipeViewModel
 import ru.netology.myrecipebook.adapter.StepAdapter
 import ru.netology.myrecipebook.databinding.FragmentNewStepBinding
 
-class NewStepFragment:Fragment() {
+class NewStepFragment : Fragment() {
 
-   private val args by navArgs<NewStepFragmentArgs>()
-   private val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
-
-
-
-   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
-   ) = FragmentNewStepBinding.inflate(layoutInflater, container, false).also { binding ->
+    private val args by navArgs<NewStepFragmentArgs>()
+    private val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
 
-      binding.edit.requestFocus()
-      binding.edit.setText(args.initialStep?.stepText)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = FragmentNewStepBinding.inflate(layoutInflater, container, false).also { binding ->
 
-      binding.ok.setOnClickListener {
-         onOkButtonClicked(binding)
-      }
-   }.root
 
-   private fun onOkButtonClicked(binding: FragmentNewStepBinding) {
+        binding.edit.requestFocus()
+        binding.edit.setText(args.initialStep?.stepText)
 
-      val stepText = binding.edit.text.toString()
+        binding.ok.setOnClickListener {
+            onOkButtonClicked(binding)
+        }
+    }.root
 
-      if (!stepText.isNullOrBlank()) {
-         val resultBundleStep = Bundle(1)
-         resultBundleStep.putString(RESULT_KEY_STEP, stepText)
-         setFragmentResult(REQUEST_KEY_STEP, resultBundleStep)
-      }
+    private fun onOkButtonClicked(binding: FragmentNewStepBinding) {
 
-      findNavController().navigateUp()
+        val stepText = binding.edit.text.toString()
 
-   }
+        if (!stepText.isNullOrBlank()) {
+            val resultBundleStep = Bundle(1)
+            resultBundleStep.putString(RESULT_KEY_STEP, stepText)
+            setFragmentResult(REQUEST_KEY_STEP, resultBundleStep)
+        }
 
-   companion object {
-      const val RESULT_KEY_STEP = "resultKeyStep"
-      const val REQUEST_KEY_STEP = "requestKeyStep"
+        findNavController().navigateUp()
 
-   }
+    }
+
+    companion object {
+        const val RESULT_KEY_STEP = "resultKeyStep"
+        const val REQUEST_KEY_STEP = "requestKeyStep"
+
+    }
 }

@@ -1,21 +1,14 @@
 package ru.netology.myrecipebook.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.myrecipebook.R
-import ru.netology.myrecipebook.components.ListCategory
 import ru.netology.myrecipebook.components.Recipe
 import ru.netology.myrecipebook.databinding.RecipeListItemBinding
-import java.util.*
-import kotlin.collections.ArrayList
 
 class RecipeAdapter(
     private val interactionListener: RecipeInteractionListener
@@ -57,7 +50,7 @@ class RecipeAdapter(
             binding.options.setOnClickListener {
                 listener.onEditClicked(recipe)
             }
-            binding.isFavorite.setOnClickListener{
+            binding.isFavorite.setOnClickListener {
                 listener.onFavoriteClicked(recipe)
             }
 

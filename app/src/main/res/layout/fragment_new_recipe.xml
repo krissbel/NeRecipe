@@ -10,51 +10,48 @@
         android:id="@+id/titleAuthorName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/author_name"
         android:ellipsize="end"
         android:singleLine="true"
-        android:contentDescription="@string/author_name"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:text="@string/author_name_title"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/authorName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/author_name"
         android:ellipsize="end"
         android:singleLine="true"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="@id/titleAuthorName"
-        tools:text="Автор рецепта"
         tools:ignore="ContentDescription"
-        />
+        tools:text="Автор рецепта" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/titleCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/author_name"
         android:ellipsize="end"
         android:singleLine="true"
-        android:contentDescription="@string/author_name"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/authorName"
+        android:text="@string/category"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/category" />
+        app:layout_constraintTop_toBottomOf="@id/authorName" />
 
     <Spinner
         android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:contentDescription="@string/category_name"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/category_name"
         android:entries="@array/Category"
-        app:layout_constraintTop_toBottomOf="@id/authorName"
+        android:singleLine="true"
         app:layout_constraintStart_toEndOf="@id/titleCategory"
-        />
+        app:layout_constraintTop_toBottomOf="@id/authorName" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title_recipe_name"
@@ -63,8 +60,8 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="@string/recipe_name"
-        app:layout_constraintTop_toBottomOf="@id/category"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/category" />
 
 
     <EditText
@@ -80,48 +77,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new_step"
-        app:layout_constraintTop_toBottomOf="@id/recipeName"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@id/recipeName"
         app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/showSteps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SHOW STEP"
-        app:layout_constraintStart_toEndOf="@id/newStep"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recipeName"
-        />
+        app:layout_constraintTop_toBottomOf="@id/recipeName" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_steps"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/newStep"
         android:background="@color/white"
         android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/newStep"
         tools:context=".activity.FeedFragment"
-        tools:listitem="@layout/step_list_item"/>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_constraintStart_toEndOf="@id/list_steps">
+        tools:listitem="@layout/step_list_item" />
 
-</ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toEndOf="@id/list_steps">
+
+    </ScrollView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/description_recipe_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_save_24dp" />
 
 

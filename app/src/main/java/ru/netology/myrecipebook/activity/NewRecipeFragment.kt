@@ -3,13 +3,13 @@ package ru.netology.myrecipebook.activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.myrecipebook.R
 import ru.netology.myrecipebook.RecipeViewModel
 import ru.netology.myrecipebook.adapter.StepAdapter
-import ru.netology.myrecipebook.components.Recipe
 import ru.netology.myrecipebook.databinding.FragmentNewRecipeBinding
 
 class NewRecipeFragment : Fragment() {
@@ -58,37 +58,29 @@ class NewRecipeFragment : Fragment() {
         binding.ok.setOnClickListener {
             onOkButtonClicked(binding)
         }
-        binding.newStep.setOnClickListener {
-            viewModel.onAddStepClicked()
+
+        if(args.initialContent != null) {
+            binding.newStep.isVisible = true
+            binding.newStep.setOnClickListener {
+                viewModel.onAddStepClicked(args.initialContent)
+            }
         }
 
-//        val adapter = StepAdapter(viewModel)
-//        binding.showSteps.setOnClickListener {
-//            viewModel.showStepByRecipeId(recipeId = args.initialContent?.id)
-//            viewModel.stepData.observe(viewLifecycleOwner) { steps ->
-             //   viewModel.showStepByRecipeId(args.initialContent?.id)
-//                adapter.submitList(steps)
-//            }
-//        }
 
         val adapter = StepAdapter(viewModel)
         binding.listSteps.adapter = adapter
 
 
 
+
         fun showSteps() {
             viewModel.stepData.observe(viewLifecycleOwner) { steps ->
-               viewModel.showStepByRecipeId(args.initialContent?.id)
                 adapter.submitList(steps)
             }
         }
 
-        viewModel.stepData.observe(viewLifecycleOwner){steps ->
-            viewModel.showStepByRecipeId(viewModel.currentRecipe.value?.id)
-            showSteps()
-        }
-
-
+        viewModel.showStepByRecipeId(args.initialContent?.id)
+        showSteps()
 
     }.root
 

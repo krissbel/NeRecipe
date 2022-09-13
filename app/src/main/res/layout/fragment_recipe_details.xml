@@ -15,7 +15,7 @@
         android:contentDescription="@string/author_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Автор рецепта" />
+        android:text="@string/author_name_title" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/authorName"
@@ -38,7 +38,7 @@
         android:contentDescription="@string/category_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/authorName"
-        android:text="Категория" />
+        android:text="@string/category" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/category"
@@ -51,7 +51,6 @@
         android:textSize="20dp"
         android:textColor="@color/black"
         tools:text="Категория" />
-
 
 
     <com.google.android.material.button.MaterialButton
@@ -78,7 +77,7 @@
         android:contentDescription="@string/recipe_text"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/headerBarrier"
-        android:text="Название рецепта" />
+        android:text="@string/recipe_name" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -108,5 +107,22 @@
         app:icon="@drawable/ic_star_24dp"
         app:layout_constraintTop_toBottomOf="@id/textRecipe"
         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_steps"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/isFavorite"
+        android:background="@color/white"
+        android:scrollbars="vertical"
+        tools:context=".activity.FeedFragment"
+        tools:listitem="@layout/step_list_item"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toEndOf="@id/list_steps">
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
